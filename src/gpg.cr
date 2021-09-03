@@ -48,6 +48,19 @@ class GPG
     plain_data.tap(&.rewind).gets_to_end
   end
 
+  def sign(plain, mode = LibGPG::SigMode::Normal)
+    plain_data = Data.new(plain).tap(&.rewind)
+    sig_data = Data.new
+
+    gpg_error = LibGPG.op_sign(@handle, plain_data, sig_data, mode)
+    Exception.raise_if_error(gpg_error)
+    sig_data.tap(&.rewind).gets_to_end
+  end
+
+  def detach_sign(plain)
+    sign(plain, LibGPG::SigMode::Detach)
+  end
+
   def signers
     Signers.new(@handle)
   end
