@@ -17,7 +17,7 @@ lib LibGPG
     Ask
     Cancel
     Error
-    Loopback 
+    Loopback
   end
 
   enum PubkeyAlgo
@@ -121,6 +121,13 @@ lib LibGPG
     _last_notation : SigNotation*
   end
 
+  @[Flags]
+  enum SigMode
+    Clear
+    Detach
+    Normal
+  end
+
   struct Subkey
     next : Subkey*
     info : UInt32
@@ -200,6 +207,7 @@ lib LibGPG
   fun op_decrypt = gpgme_op_decrypt(
     context : Context, cipher : Data, plain : Data
   ) : Error
+  fun op_sign = gpgme_op_sign(context : Context, plain : Data, sig : Data, mode : SigMode) : Error
 
   fun signers_enum = gpgme_signers_enum(context : Context, index : Int32) : Key*
   fun signers_add = gpgme_signers_add(context : Context, key : Key*) : Error
