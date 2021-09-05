@@ -18,6 +18,21 @@ class GPG
     LibGPG.release(@handle)
   end
 
+  def info
+    LibGPG.op_ctx_get_engine_info(@handle).value
+  end
+
+  def set_info(proto : LibGPG::Protocol, file_name : UInt8*, home_dir : UInt8*)
+    gpg_error = LibGPG.op_ctx_set_engine_info(@handle, proto, file_name, home_dir)
+    Exception.raise_if_error(gpg_error)
+    nil
+  end
+
+  def home_dir=(value : String)
+    current = info
+    set_info(current.protocol, current.file_name, value.to_unsafe)
+  end
+
   def list_keys(pattern = "", secret_only = false)
     gpg_error = LibGPG.op_keyslist_start(@handle, pattern, secret_only ? 1 : 0)
     Exception.raise_if_error(gpg_error)
