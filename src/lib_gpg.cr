@@ -198,6 +198,9 @@ lib LibGPG
   fun op_ctx_get_engine_info = gpgme_ctx_get_engine_info(context : Context) : EngineInfo*
   fun op_ctx_set_engine_info = gpgme_ctx_set_engine_info(context : Context, proto : Protocol, file_name : UInt8*, home_dir : UInt8*) : Error
 
+  fun op_set_passphrase_cb = gpgme_set_passphrase_cb(
+    context : Context, cb : (Pointer(Void), UInt8*, UInt8*, Int32, Int32) -> Error, hook_value : Pointer(Void))
+
   fun op_keyslist_start = gpgme_op_keylist_start(
     context : Context, pattern : UInt8*, secret_only : Int32
   ) : Error
