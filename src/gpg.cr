@@ -33,6 +33,14 @@ class GPG
     set_info(current.protocol, current.file_name, value.to_unsafe)
   end
 
+  def armor?
+    LibGPG.op_get_armor(@handle) == 1 ? true : false
+  end
+
+  def armor=(yes)
+    LibGPG.op_set_armor(@handle, yes ? 1 : 0)
+  end
+
   def set_passphrase_callback(cb : (Pointer(Void), UInt8*, UInt8*, Int32, Int32) -> LibGPG::Error, hook_value : Pointer(Void)?)
     LibGPG.op_set_passphrase_cb(@handle, cb, hook_value)
   end
