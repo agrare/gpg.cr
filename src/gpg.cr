@@ -33,6 +33,10 @@ class GPG
     set_info(current.protocol, current.file_name, value.to_unsafe)
   end
 
+  def set_passphrase_callback(cb : (Pointer(Void), UInt8*, UInt8*, Int32, Int32) -> LibGPG::Error, hook_value : Pointer(Void)?)
+    LibGPG.op_set_passphrase_cb(@handle, cb, hook_value)
+  end
+
   def list_keys(pattern = "", secret_only = false)
     gpg_error = LibGPG.op_keyslist_start(@handle, pattern, secret_only ? 1 : 0)
     Exception.raise_if_error(gpg_error)
