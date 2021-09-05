@@ -94,6 +94,15 @@ lib LibGPG
     _unused : Int32
   end
 
+  struct EngineInfo
+    next : EngineInfo*
+    protocol : Protocol
+    file_name : UInt8*
+    version : UInt8*
+    req_version : UInt8*
+    home_dir : UInt8*
+  end
+
   @[Flags]
   enum KeySignatureFlags
     Revoked
@@ -186,6 +195,9 @@ lib LibGPG
 
   fun strerror = gpgme_strerror(error : Error) : UInt8*
   fun error_from_errno = gpgme_error_from_errno(errno : Int32) : Error
+
+  fun op_ctx_get_engine_info = gpgme_ctx_get_engine_info(context : Context) : EngineInfo*
+  fun op_ctx_set_engine_info = gpgme_ctx_set_engine_info(context : Context, proto : Protocol, file_name : UInt8*, home_dir : UInt8*) : Error
 
   fun op_keyslist_start = gpgme_op_keylist_start(
     context : Context, pattern : UInt8*, secret_only : Int32
