@@ -4,11 +4,10 @@ require "./gpg/*"
 class GPG
   @handle : LibGPG::Context
 
-  if LibGPG.check_version("1.4.0").null?
-    raise "GPGME version >= 1.4.0 is required"
-  end
 
   def initialize
+    raise "GPGME version >= 1.4.0 is required" if LibGPG.check_version("1.4.0").null?
+
     gpg_error = LibGPG.new(out handle)
     Exception.raise_if_error(gpg_error)
     @handle = handle
